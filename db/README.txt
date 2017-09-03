@@ -1,0 +1,1 @@
+This sdp.sql file needs to imported in as a new database in my php admin. It contains some logic checking relationships.
