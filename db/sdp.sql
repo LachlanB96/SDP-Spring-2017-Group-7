@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Sep 03, 2017 at 03:17 PM
+-- Generation Time: Sep 03, 2017 at 03:30 PM
 -- Server version: 5.6.35
 -- PHP Version: 7.1.2
 
@@ -16,9 +16,6 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
---
--- Database: `sdp`
---
 
 -- --------------------------------------------------------
 
@@ -26,7 +23,6 @@ SET time_zone = "+00:00";
 -- Table structure for table `journalEntries`
 --
 
-DROP TABLE IF EXISTS `journalEntries`;
 CREATE TABLE IF NOT EXISTS `journalEntries` (
   `title` varchar(255) NOT NULL,
   `journal` varchar(255) NOT NULL,
@@ -52,7 +48,6 @@ INSERT INTO `journalEntries` (`title`, `journal`, `creator`, `contents`, `dateCr
 -- Table structure for table `journals`
 --
 
-DROP TABLE IF EXISTS `journals`;
 CREATE TABLE IF NOT EXISTS `journals` (
   `title` varchar(255) NOT NULL,
   `creator` varchar(255) NOT NULL,
@@ -75,7 +70,6 @@ INSERT INTO `journals` (`title`, `creator`, `creationDate`, `status`) VALUES
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL
