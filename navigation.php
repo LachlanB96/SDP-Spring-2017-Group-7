@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <nav class="navbar navbar-inverse navbar-fixed-top" id="nav">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -8,7 +12,7 @@
             <li><a href="about.php" target="_parent">About</a></li>
             <li><a href="settings.php" target="_parent">Settings</a></li>
             <li><a href="developer.php" target="_parent">Developer</a></li>
-            <li><a href="account.php" target="_parent" style="float: right;">Logged in: Wilder12</a></li>
+            <li><a href="account.php" target="_parent" style="float: right;">Logged in: <?=$_SESSION['username']?></a></li>
         </ul>
     </div>
 </nav>

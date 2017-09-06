@@ -7,16 +7,15 @@
 <body>
     <?php
     include("navigation.php");
-    var_dump($_SESSION);
     ?>
 
     <div class="container">
         <div class="jumbotron">
             <h1>Wilder Journal</h1>
             <?php session_start();?>
-                <div id="journalsTable"></div>
-                <a type="button" class="btn btn-warning btn-block" id="viewJournal">View Selected Journal</a>
-                <a type="button" class="btn btn-success btn-block" id="createJournal">Create Journal</a>
+            <div id="journalsTable"></div>
+            <a type="button" class="btn btn-warning btn-block" id="viewJournal">View Selected Journal</a>
+            <a type="button" class="btn btn-success btn-block" id="createJournal">Create Journal</a>
         </div>
     </div>
     <script type="text/javascript">
@@ -59,6 +58,10 @@
         });
     </script>
 </body>
+<?php
+var_dump($_SESSION);
+var_dump($_POST);
+?>
 </html>
 
 

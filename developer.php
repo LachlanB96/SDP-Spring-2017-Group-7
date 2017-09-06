@@ -18,6 +18,11 @@
 			<a type="button" class="btn btn-warning btn-block" id="readJournalTable">Load Journals Table</a>
 			<p id="journalsTableShow">Empty</p>
 			<a type="button" class="btn btn-danger btn-block" id="truncTable">Trunc Users Table</a>
+			<?php
+			session_start();
+			var_dump($_SESSION);
+			var_dump($_POST);
+			?>
 		</div>
 	</div>
 	<script>
