@@ -1,0 +1,226 @@
+<html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="buttonStyle.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Lachlan Brown">
+    <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+</head>
+<body>
+
+    <div id ="myContainer">
+        <div id ="myAnimation"></div>
+    </div>
+
+    <script>
+        window.onload=function () {
+            setInterval(game,1000/3);
+        }
+
+        squareSize=20;
+        highlightedSquareX = 2;
+        highlightedSquareY = 4;
+
+        coins = 0;
+        coinPresent = false;
+        treePresent = false;
+
+        leftKey = 37;
+        rightKey = 39;
+        upKey = 38;
+        downKey = 40;
+        spaceKey = 32;
+
+        function game() {
+            removeBlocks();
+            inventory();
+            //getSquare();
+            for(var i=0;i<20;i++) {
+                for(var j=0;j<20;j++) {
+                    if(i == highlightedSquareX && j == highlightedSquareY){
+                        makeBlock(i, j, "black", "player");
+                    } else {
+                        makeBlock(i, j, "white");
+
+                    }
+
+                }
+            }
+            coin();
+            tree();
+        }
+        function makeBlock(px, py, col, id="null", height=0){
+            var block = document.createElement("a");
+            block.className = "btn block";
+            block.id = id;
+            //block.style.
+            //block.setAttribute("onmouseover", "test(this)");
+            block.style.position = "absolute";
+            block.style.left = String(px*squareSize) + "px";
+            block.style.top = String(py*squareSize) + "px";
+            block.style.background = col;
+            var body = document.getElementsByTagName("body")[0];
+            body.appendChild(block);
+        }
+        function removeBlocks(){
+            var blocks = document.getElementsByClassName("block");
+            while(blocks.length > 0){
+                blocks[0].parentNode.removeChild(blocks[0]);
+            }
+        }
+
+        function coin(){
+            if(coinPresent){
+                makeBlock(coinSquareX, coinSquareY, "red");
+            }
+        }
+
+        function tree(){
+            if(treePresent){
+                console.log(treeSquareX);
+                makeBlock(treeSquareX, treeSquareY, "green");
+            }
+        }
+
+        function inventory(){
+            document.getElementById("invCoins").innerHTML = coins;
+        }
+
+        function update(ord, move, del) {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200 && del == false) {
+                    console.log(this.responseText);
+                    var data = JSON.parse(this.responseText);
+                    console.log(data);
+                    highlightedSquareX = data.player.ord.x;
+                    highlightedSquareY = data.player.ord.y;
+                    coinSquareX = data.coin.ord.x;
+                    coinSquareY = data.coin.ord.y;
+                    coins = data.coins;
+                    coinPresent = true;
+                    if(data.tree != null){
+                        treePresent = false;
+                    }
+                    if(data.tree !== undefined && data.tree != null){
+                        console.log(data.tree.meta.count);
+                        treePresent = true;
+                        treeSquareX = data.tree.ord.x;
+                        treeSquareY = data.tree.ord.y;
+                    }else{
+                        treePresent = false;
+                    }
+                    document.getElementById("actions").innerHTML = data.feedback.action;
+
+                }
+            };
+            if(del){
+                xmlhttp.open("GET", "getHint.php?del=true", true);
+            }else{
+                if(ord == "z"){
+                    xmlhttp.open("GET", "getHint.php?action=true", true);
+                }else{
+                    xmlhttp.open("GET", "getHint.php?ord=" + ord + "&move=" + move, true);
+                }
+            }
+            xmlhttp.send();
+        }
+
+        function test(){
+            console.log("y");
+        }
+
+        $(document).keydown(function(e){
+            console.log(e.keyCode);
+            if (e.keyCode==leftKey){
+                ord = "x";
+                move = -1;
+                del = false;
+                // document.getElementById("player").animate(
+                //     [
+                //         { transform: 'translateX(0px)' }, 
+                //         { transform: 'translateX(-80px)' }
+                //     ], 
+                //     { 
+                //         duration: 1000,
+                //     }
+                // );
+            }
+            if (e.keyCode==upKey){
+                ord = "y";
+                move = -1;
+                del = false;
+                // document.getElementById("player").animate(
+                //     [
+                //         { transform: 'translateY(0px)' }, 
+                //         { transform: 'translateY(-80px)' }
+                //     ], 
+                //     { 
+                //         duration: 1000,
+                //     }
+                // );
+            }
+            if (e.keyCode==rightKey){
+                ord = "x";
+                move = 1;
+                del = false;
+                // document.getElementById("player").animate(
+                //     [
+                //         { transform: 'translateX(0px)' }, 
+                //         { transform: 'translateX(80px)' }
+                //     ], 
+                //     { 
+                //         duration: 1000,
+                //     }
+                // );
+            }
+            if (e.keyCode==downKey){
+                ord = "y";
+                move = 1;
+                del = false;
+                // document.getElementById("player").animate(
+                //     [
+                //         { transform: 'translateY(0px)' }, 
+                //         { transform: 'translateY(80px)' }
+                //     ], 
+                //     { 
+                //         duration: 1000,
+                //     }
+                // );
+            }
+            if (e.keyCode==spaceKey){
+                ord = "z";
+                move = 0;
+                del = false;
+            }
+            update(ord, move, del)
+        });
+
+    </script>
+    <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+<input type="button" onclick="update(0, 0, true)">
+<div id ="inventory">
+    <table>
+        <tr>
+            <td>
+                Coins
+            </td>
+        </tr>
+        <tr>
+            <td id=invCoins>
+                $
+            </td>
+        </tr>
+    </table>
+</div>
+<div id ="inventory">
+    <p id = "actions">
+
+    </p>
+</div>
+</body>
+</html>

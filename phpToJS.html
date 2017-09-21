@@ -1,0 +1,50 @@
+<html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" href="buttonStyle.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="Lachlan Brown">
+    <meta name="keywords" content="HTML,CSS,XML,JavaScript">
+</head>
+<body>
+    <div id ="inventory">
+        <ul>
+            <li id=0></li>
+            <li id=1></li>
+            <li id=2></li>
+            <li id=3></li>
+            <li id=4></li>
+            <li id=5></li>
+            <li id=6></li>
+        </ul>
+    </div>
+    <script>
+        index = 0;
+        function increaseArray() {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log(this.responseText);
+                    var obj = JSON.parse(this.responseText);
+                    document.getElementById("0").innerHTML = obj[0];
+                    document.getElementById("1").innerHTML = obj[1];
+                    document.getElementById("2").innerHTML = obj[2];
+                    document.getElementById("3").innerHTML = obj[3];
+                    document.getElementById("4").innerHTML = obj[4];
+                    document.getElementById("5").innerHTML = obj[5];
+                    document.getElementById("6").innerHTML = obj[6];
+                }
+            };
+            xmlhttp.open("GET", "phpToJS.php?index="+index, true);
+            xmlhttp.send();
+            index++;
+        }
+
+    </script>
+    <input type="button" onclick="increaseArray()">
+</body>
+</html>
