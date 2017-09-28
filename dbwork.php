@@ -52,7 +52,7 @@ if (mysqli_connect_errno())
                     <div id = "debugTools">
                     </div>
 
-    <a type="button" class="btn post" action="test">Click me!!</a>
+    <a type="button" class="btn post btn-success" action="test">Click me!!!</a>
     <a type="button" class="btn post btn-warning" action="111111111">Click me! 1</a>
 
 </div id="page">
@@ -72,7 +72,7 @@ if (mysqli_connect_errno())
     });
     $("#action").click(function(){
         console.log($("#action").val());
-        if
+        //if
 
         // $.post("dbwork.php",
         // {
