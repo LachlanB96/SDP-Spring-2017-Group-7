@@ -18,6 +18,7 @@
 			<a type="button" class="btn btn-warning btn-block" id="readJournalTable">Load Journals Table</a>
 			<p id="journalsTableShow">Empty</p>
 			<a type="button" class="btn btn-danger btn-block" id="truncTable">Trunc Users Table</a>
+			<a type="button" class="btn btn-danger btn-block" id="test">Test</a>
 			<?php
 			session_start();
 			var_dump($_SESSION);
@@ -66,6 +67,17 @@
 				$("#journalsTableShow").html(data);
 			});
 		});
+		function postData(data, webpage) {
+			$.post(webpage, data,
+			function(data, status){
+				alert(data);
+			});
+		}
+		$("#test").click(postData({
+				action: "read",
+				table: "journals"}, 
+				"test.php");
+		);
 	</script>
 </body>
 </html>
