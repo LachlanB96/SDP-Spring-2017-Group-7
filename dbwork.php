@@ -60,6 +60,18 @@ if (mysqli_connect_errno())
     </div id="page">
 </body>
 <script type="text/javascript">
+
+
+    function addToString(originalString, data){
+        console.log(data.additionType + "1");
+        console.log(data + "2");
+        console.log(originalString + "3");
+        if (data.additionType == "button"){
+            console.log(originalString);
+        }
+    }
+
+
     $(".post").click(function(){
         var $action = $(this);
         console.log($(this));
@@ -75,11 +87,18 @@ if (mysqli_connect_errno())
 
     $("#action").click(function(){
         var actionHTMLString = "";
+        var actionHTMLStringTest = "";
         var objectData = {};
         if($("#action").val() == "Create User"){
             actionHTMLString += "Username:<input type='text' id='username' value='Mickey'><br>";
             actionHTMLString += "Password:<input type='text' id='password' value='hunter2'><br><br>";
             actionHTMLString += "<a type='button' class='btn post btn-success' id='createUser'>Create User</a>";
+            actionHTMLStringTest = addToString(actionHTMLString, {
+                additionType: "textInput",
+                id: "username",
+                value: "Lachlan",
+                text: "Create User"
+            });
             objectData = {
                 action: "create",
                 type: "user",
@@ -106,7 +125,7 @@ if (mysqli_connect_errno())
                 description: $("#description").val(),
                 tags: $("#tags").val(),
                 file: $("#file").val()
-            }
+            };
             $(document).on('click', '#createJournal', function(){
                 createObject(objectData);
             });
@@ -123,56 +142,59 @@ if (mysqli_connect_errno())
                 type: "login",
                 username: $("#username").val(),
                 password: $("#password").val()
-            }
+            };
             $(document).on('click', '#createUser', function(){
                 createObject(objectData);
-            }); } else {
-                actionHTMLString = "";
-            }
-            $("#debugTools").html(actionHTMLString);
+            }); 
+
+
+        } else {
+            actionHTMLString = "";
+        }
+        $("#debugTools").html(actionHTMLString);
+    });
+
+    function createObject(objectData){
+        $.post("databaseHandler.php", objectData, function(data, status){
+            console.log(data);
+            console.log(status);
         });
+    };
 
-            function createObject(objectData){
-                $.post("databaseHandler.php", objectData, function(data, status){
-                    console.log(data);
-                    console.log(status);
-                });
-            };
-
-        </script>
-        <?php
+</script>
+<?php
 
 
-        $sql="SELECT * FROM users";
-        if ($users=mysqli_query($con,$sql)){
-            while ($user=mysqli_fetch_row($users)){
-                echo "<br />+";
-                printf ("(Username) %s (Password) %s", $user[0], $user[1]);
-                $sql="SELECT * FROM journals WHERE creator LIKE '" . $user[0] . "'";
-                if ($journals=mysqli_query($con,$sql)){
-                    while ($journal=mysqli_fetch_row($journals)){
-                        echo "<br />|---";
-                        printf ("(Title) %s (Creator) %s", $journal[0], $journal[1]);
-                        $sql="SELECT * FROM journalEntries WHERE journal LIKE '" . $journal[0] . "' AND creator LIKE '" . $journal[1] . "'";
-                        if ($journalEntries=mysqli_query($con,$sql)){
-                            while ($entry=mysqli_fetch_row($journalEntries)){
-                                echo "<br />|---+---";
-                                printf ("(Title) %s (Journal) %s (Creator) %s (Content) %s",
-                                    $entry[0], $entry[1], $entry[2], $entry[3]);
-                            }
-                        }
+$sql="SELECT * FROM users";
+if ($users=mysqli_query($con,$sql)){
+    while ($user=mysqli_fetch_row($users)){
+        echo "<br />+";
+        printf ("(Username) %s (Password) %s", $user[0], $user[1]);
+        $sql="SELECT * FROM journals WHERE creator LIKE '" . $user[0] . "'";
+        if ($journals=mysqli_query($con,$sql)){
+            while ($journal=mysqli_fetch_row($journals)){
+                echo "<br />|---";
+                printf ("(Title) %s (Creator) %s", $journal[0], $journal[1]);
+                $sql="SELECT * FROM journalEntries WHERE journal LIKE '" . $journal[0] . "' AND creator LIKE '" . $journal[1] . "'";
+                if ($journalEntries=mysqli_query($con,$sql)){
+                    while ($entry=mysqli_fetch_row($journalEntries)){
+                        echo "<br />|---+---";
+                        printf ("(Title) %s (Journal) %s (Creator) %s (Content) %s",
+                            $entry[0], $entry[1], $entry[2], $entry[3]);
                     }
                 }
             }
         }
+    }
+}
 
-        if (1 == 1){
-          $sql = "INSERT INTO users (username, password)
-          VALUES (" . var_dump(microtime()) . ", 'pass')";
+if (1 == 1){
+  $sql = "INSERT INTO users (username, password)
+  VALUES (" . var_dump(microtime()) . ", 'pass')";
 
 
-          mysqli_query($con,$sql);
-      }
+  mysqli_query($con,$sql);
+}
 
-      mysqli_close($con);
-      ?>
+mysqli_close($con);
+?>

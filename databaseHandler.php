@@ -6,11 +6,18 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
 
+var_dump($_POST);
 
 if($_POST['action'] == "create"){
 	if($_POST['type'] == "user"){
+		echo "TEST dhnwjnwdn";
 		$sql = "INSERT INTO users (username, password)
 		VALUES ('".$_POST['username']."','".$_POST['password']."')";
+	}
+	else if($_POST['type'] == "journal"){
+		$sql = "INSERT INTO users (username, password)
+		VALUES ('".$_POST['username']."','".$_POST['password']."')";
+		echo $sql;
 	}
 }
 
