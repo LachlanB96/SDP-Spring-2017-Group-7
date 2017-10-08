@@ -3,7 +3,7 @@
 $conn = new mysqli("localhost", "root", "mysql", "sdp");
 
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+	die("Connection failed: " . $conn->connect_error);
 } 
 
 var_dump($_POST);
@@ -21,10 +21,21 @@ if($_POST['action'] == "create"){
 	}
 }
 
+else if($_POST['action'] == "read"){
+	if($_POST['type'] == "login"){
+		$sql="SELECT * FROM users WHERE username == '" . $_POST['username'] . "'";
+		if ($users=$conn->query($sql)){
+			while ($user=mysqli_fetch_row($users)){
+				echo $user[0] . "<br />";
+			}
+		}
+	}
+}
+
 if ($conn->query($sql) === TRUE) {
-    echo "New record created successfully";
+	echo "New record created successfully";
 } else {
-    echo "Error: " . $sql . "<br>" . $conn->error;
+	echo "Error: " . $sql . "<br>" . $conn->error;
 }
 
 if($_POST['action'] == "write"){

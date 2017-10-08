@@ -36,6 +36,7 @@ if (mysqli_connect_errno())
         <h2>DEBUG TOOL</h2>
         <td><label class="field" for="origin">Select your action: </label></td>
         <td><select name="action" id="action" required>
+            <option value="Login">Login</option>
             <option value="Create User">Create User</option>
             <option value="Create Journal">Create Journal</option>
             <option value="Create Entry">Create Entry</option>
@@ -62,19 +63,18 @@ if (mysqli_connect_errno())
 <script type="text/javascript">
 
 
-    function addToString(originalString, data){
-        console.log(data.additionType + "1");
-        console.log(data + "2");
-        console.log(originalString + "3");
+    function addToString(data){
         if (data.additionType == "button"){
-            console.log(originalString);
+            return "<a type='button' class='" + data.class + "' id='" + data.id + "'>" + data.text + "</a>";
+        }
+        else if (data.additionType == "textInput"){
+            return data.text + ":<input type='text' id='" + data.id + "' value='" + data.value + "'><br />";
         }
     }
 
 
     $(".post").click(function(){
         var $action = $(this);
-        console.log($(this));
         $.post("dbwork.php",
         {
             action: $action.attr('action'),
@@ -90,60 +90,56 @@ if (mysqli_connect_errno())
         var actionHTMLStringTest = "";
         var objectData = {};
         if($("#action").val() == "Create User"){
-            actionHTMLString += "Username:<input type='text' id='username' value='Mickey'><br>";
-            actionHTMLString += "Password:<input type='text' id='password' value='hunter2'><br><br>";
-            actionHTMLString += "<a type='button' class='btn post btn-success' id='createUser'>Create User</a>";
-            actionHTMLStringTest = addToString(actionHTMLString, {
-                additionType: "textInput",
-                id: "username",
-                value: "Lachlan",
-                text: "Create User"
-            });
-            objectData = {
-                action: "create",
-                type: "user",
-                username: $("#username").val(),
-                password: $("#password").val()
-            }
+            input_username = {additionType: "textInput", id: "username", text: "Username", value: "Lachlan"};
+            input_password = {additionType: "textInput", id: "password", text: "Password", value: "hunter2"};
+            input_submit = {additionType: "button", id: "createUser", text: "Create User", class: "btn post btn-success"};
+            actionHTMLString += addToString(input_username);
+            actionHTMLString += addToString(input_password);
+            actionHTMLString += addToString(input_submit);
             $(document).on('click', '#createUser', function(){
+                objectData = {
+                    action: "create",
+                    type: "user",
+                    username: $("#username").val(),
+                    password: $("#password").val()
+                }
                 createObject(objectData);
             });
-
         } else if($("#action").val() == "Create Journal"){
-            console.log("w");
+            input_title = {additionType: "textInput", id: "title", text: "Title", value: "Engineering Journal"};
             actionHTMLString += "Title:<input type='text' id='title' value='Engineering Journal'><br>";
             actionHTMLString += "Collaborators:<input type='text' id='collaborators' value='For Internal engineering use'><br>";
             actionHTMLString += "Description:<input type='text' id='description' value='Lorem Ipsum Blah Blah'><br>";
             actionHTMLString += "Tags:<input type='text' id='tags' value='Urgent Collaborated Important'><br>";
             actionHTMLString += "Attach File:<input type='text' id='file' value='blueprint.png'><br><br>";
             actionHTMLString += "<a class='btn post btn-success' id='createJournal'>Create Journal</a>";
-            objectData = {
-                action: "create",
-                type: "journal",
-                title: $("#title").val(),
-                collaborators: $("#collaborators").val(),
-                description: $("#description").val(),
-                tags: $("#tags").val(),
-                file: $("#file").val()
-            };
+            
             $(document).on('click', '#createJournal', function(){
+                objectData = {
+                    action: "create",
+                    type: "journal",
+                    title: $("#title").val(),
+                    collaborators: $("#collaborators").val(),
+                    description: $("#description").val(),
+                    tags: $("#tags").val(),
+                    file: $("#file").val()
+                };
                 createObject(objectData);
             });
 
             //LOGGING IN
         } else if($("#action").val() == "Login"){
-            console.log("w");
-            actionHTMLString += "Title:<input type='text' id='title' value='Engineering Journal'><br>";
             actionHTMLString += "Username:<input type='text' id='username'><br>";
             actionHTMLString += "Password:<input type='text' id='password'><br><br>";
-            actionHTMLString += "<a class='btn post btn-success' id='createUser'>Create User</a>";
-            objectData = {
+            actionHTMLString += "<a class='btn post btn-success' id='login'>Login</a>";
+            
+            $(document).on('click', '#login', function(){
+                objectData = {
                 action: "read",
                 type: "login",
                 username: $("#username").val(),
                 password: $("#password").val()
             };
-            $(document).on('click', '#createUser', function(){
                 createObject(objectData);
             }); 
 
@@ -156,8 +152,8 @@ if (mysqli_connect_errno())
 
     function createObject(objectData){
         $.post("databaseHandler.php", objectData, function(data, status){
-            console.log(data);
-            console.log(status);
+            console.log("DATA: " + data);
+            console.log("STATUS: " + status);
         });
     };
 
@@ -186,11 +182,6 @@ if ($users=mysqli_query($con,$sql)){
             }
         }
     }
-}
-
-if (1 == 1){
-  $sql = "INSERT INTO users (username, password)
-  VALUES (" . var_dump(microtime()) . ", 'pass')";
 
 
   mysqli_query($con,$sql);
