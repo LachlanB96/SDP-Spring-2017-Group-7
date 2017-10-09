@@ -32,6 +32,9 @@ if (mysqli_connect_errno())
         }
         var_dump($_SESSION);
         echo "<br />";
+        if(isset($_SESSION['currentUser'])){
+            echo $_SESSION['currentUser'];
+        }
         ?>
         <h2>DEBUG TOOL</h2>
         <td><label class="field" for="origin">Select your action: </label></td>
@@ -127,6 +130,17 @@ if (mysqli_connect_errno())
                 createObject(objectData);
             });
 
+            //Viewing journals
+        }
+        else if($("#action").val() == "View Journal"){
+            input_title = {additionType: "textOutput", id: "information", text: "Here are your journals: "};
+            objectData = {
+                action: "read",
+                type: "journal"
+            };
+            journals = createObject(objectData);
+            console.log(journals + " |2|");
+
             //LOGGING IN
         } else if($("#action").val() == "Login"){
             actionHTMLString += "Username:<input type='text' id='username'><br>";
@@ -151,10 +165,14 @@ if (mysqli_connect_errno())
     });
 
     function createObject(objectData){
+        var returnData;
         $.post("databaseHandler.php", objectData, function(data, status){
             console.log("DATA: " + data);
             console.log("STATUS: " + status);
+            returnData = data;
         });
+        console.log(returnData + " |1|");
+        return returnData;
     };
 
 </script>
