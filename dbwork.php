@@ -7,17 +7,6 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <title>My Bookings</title>
 </head>
-
-<?php
-
-$con=mysqli_connect('localhost', 'root', 'mysql', 'sdp');
-// Check connection
-if (mysqli_connect_errno())
-{
-  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-}
-
-?>
 <body>
     <div id="page">
         <?php
@@ -32,13 +21,26 @@ if (mysqli_connect_errno())
         }
         var_dump($_SESSION);
         echo "<br />";
-        if(isset($_SESSION['currentUser'])){
-            echo $_SESSION['currentUser'];
-        }
         ?>
+        <h2>LOGIN INFORMATION</h2>
+        <div id = "userTools">
+            <p>
+                <?php 
+                if(isset($_SESSION['currentUser'])){
+                    echo $_SESSION['currentUser'] . " is logged in";
+                    echo "<a class='btn btn-warning' id='logout'>Logout</a>";
+                    echo "addElementWithEvent({type: 'anchor', class: 'btn btn-warning', id: 'logout', text: 'Logout', event: 'click', action 'test'})";
+                    echo "<a class='btn btn-warning' id='settings'>Settings</a>";
+                } else {
+                    echo "No one is currently logged in";
+                }
+                ?>
+            </p>
+        </div>
         <h2>DEBUG TOOL</h2>
         <td><label class="field" for="origin">Select your action: </label></td>
         <td><select name="action" id="action" required>
+            <option value="Null">Pick an action...</option>
             <option value="Login">Login</option>
             <option value="Create User">Create User</option>
             <option value="Create Journal">Create Journal</option>
@@ -56,6 +58,7 @@ if (mysqli_connect_errno())
         <div id = "debugTools">
         </div>
 
+
         <a type="button" class="btn post btn-success" action="login">Login</a>
         <a type="button" class="btn post btn-success" action="register">Register</a>
         <a type="button" class="btn post btn-warning" action="111111111">Test Debug! 1</a>
@@ -65,6 +68,10 @@ if (mysqli_connect_errno())
 </body>
 <script type="text/javascript">
 
+
+    function addElementWithEvent(data){
+
+    }
 
     function addToString(data){
         if (data.additionType == "button"){
@@ -88,7 +95,19 @@ if (mysqli_connect_errno())
         });
     });
 
-    $("#action").click(function(){
+
+    $("#logout").click(function(){
+        console.log("Test: |3|");
+        $.post("sessionHandler.php", {action: "destroy"}, function(data, status){
+            console.log("DATA: " + data);
+            console.log("STATUS: " + status);
+            $("#userTools").load(location.href + " #userTools>*", "");
+            console.log("Test: |4|");
+        });
+        console.log("Test: |5|");
+    });
+
+    $("#action").change(function(){
         var actionHTMLString = "";
         var actionHTMLStringTest = "";
         var objectData = {};
@@ -116,7 +135,7 @@ if (mysqli_connect_errno())
             actionHTMLString += "Tags:<input type='text' id='tags' value='Urgent Collaborated Important'><br>";
             actionHTMLString += "Attach File:<input type='text' id='file' value='blueprint.png'><br><br>";
             actionHTMLString += "<a class='btn post btn-success' id='createJournal'>Create Journal</a>";
-            
+
             $(document).on('click', '#createJournal', function(){
                 objectData = {
                     action: "create",
@@ -131,8 +150,7 @@ if (mysqli_connect_errno())
             });
 
             //Viewing journals
-        }
-        else if($("#action").val() == "View Journal"){
+        } else if($("#action").val() == "View Journal"){
             input_title = {additionType: "textOutput", id: "information", text: "Here are your journals: "};
             objectData = {
                 action: "read",
@@ -149,12 +167,26 @@ if (mysqli_connect_errno())
             
             $(document).on('click', '#login', function(){
                 objectData = {
-                action: "read",
-                type: "login",
-                username: $("#username").val(),
-                password: $("#password").val()
-            };
+                    action: "read",
+                    type: "login",
+                    username: $("#username").val(),
+                    password: $("#password").val()
+                };
                 createObject(objectData);
+            }); 
+
+            //LOGOUT LOGOUT LOGOUT LOGOUT
+        } else if($("#action").val() == "Logout"){
+            input_logout = {additionType: "button", id: "logout", text: "Logout", class: "btn btn-danger"};
+            actionHTMLString += addToString(input_logout);
+            $(document).on('click', '#logout', function(){
+                objectData = {
+                    action: "read",
+                    type: "login",
+                    username: $("#username").val(),
+                    password: $("#password").val()
+                };
+                destroyObject(objectData);
             }); 
 
 
@@ -164,46 +196,16 @@ if (mysqli_connect_errno())
         $("#debugTools").html(actionHTMLString);
     });
 
-    function createObject(objectData){
-        var returnData;
-        $.post("databaseHandler.php", objectData, function(data, status){
-            console.log("DATA: " + data);
-            console.log("STATUS: " + status);
-            returnData = data;
-        });
-        console.log(returnData + " |1|");
-        return returnData;
-    };
+function createObject(objectData){
+    var returnData;
+    $.post("databaseHandler.php", objectData, function(data, status){
+        console.log("DATA: " + data);
+        console.log("STATUS: " + status);
+        returnData = data;
+        $("#userTools").load(location.href + " #userTools>*", "");
+    });
+    console.log(returnData + " |1|");
+    return returnData;
+};
 
 </script>
-<?php
-
-
-$sql="SELECT * FROM users";
-if ($users=mysqli_query($con,$sql)){
-    while ($user=mysqli_fetch_row($users)){
-        echo "<br />+";
-        printf ("(Username) %s (Password) %s", $user[0], $user[1]);
-        $sql="SELECT * FROM journals WHERE creator LIKE '" . $user[0] . "'";
-        if ($journals=mysqli_query($con,$sql)){
-            while ($journal=mysqli_fetch_row($journals)){
-                echo "<br />|---";
-                printf ("(Title) %s (Creator) %s", $journal[0], $journal[1]);
-                $sql="SELECT * FROM journalEntries WHERE journal LIKE '" . $journal[0] . "' AND creator LIKE '" . $journal[1] . "'";
-                if ($journalEntries=mysqli_query($con,$sql)){
-                    while ($entry=mysqli_fetch_row($journalEntries)){
-                        echo "<br />|---+---";
-                        printf ("(Title) %s (Journal) %s (Creator) %s (Content) %s",
-                            $entry[0], $entry[1], $entry[2], $entry[3]);
-                    }
-                }
-            }
-        }
-    }
-
-
-  mysqli_query($con,$sql);
-}
-
-mysqli_close($con);
-?>
