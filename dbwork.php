@@ -42,6 +42,8 @@
         <td><select name="action" id="action" required>
             <option value="Null">Pick an action...</option>
             <option value="Login">Login</option>
+            <option value="Logout">Logout</option>
+            <option value="Become Admin">Become Admin</option>
             <option value="Create User">Create User</option>
             <option value="Create Journal">Create Journal</option>
             <option value="Create Entry">Create Entry</option>
@@ -57,16 +59,35 @@
         </select>
         <div id = "debugTools">
         </div>
-
-
-        <a type="button" class="btn post btn-success" action="login">Login</a>
-        <a type="button" class="btn post btn-success" action="register">Register</a>
-        <a type="button" class="btn post btn-warning" action="111111111">Test Debug! 1</a>
-        <a type='button' class='btn post btn-success' id='createUser'>Create User</a>
-
-    </div id="page">
+        <h2>ITEM TABLE</h2>
+        <div id = "itemTable"></div>
+    </div>
 </body>
 <script type="text/javascript">
+
+
+    function createTable(data){
+        console.log(data + "|9|");
+        table = "<table class='table table-striped'>";
+        table += "<thead>";
+        table += "<tr>";
+        table += "<th>Date Created</th>";
+        table += "<th>Pages</th>";
+        table += "<th>Status</th>";
+        table += "</tr>";
+        table += "</thead>";
+        table += "<tbody>";
+        table += "<tr>";
+        table += "<td>20/08/2017</td>";
+        table += "<td>5</td>";
+        table += "<td>Active</td>";
+        table += "</tr>";
+        table += "</tbody>";
+        table += "</table>";
+
+        $("#itemTable").html(table);
+    }
+
 
 
     function addElementWithEvent(data){
@@ -76,9 +97,10 @@
     function addToString(data){
         if (data.additionType == "button"){
             return "<a type='button' class='" + data.class + "' id='" + data.id + "'>" + data.text + "</a>";
-        }
-        else if (data.additionType == "textInput"){
+        } else if (data.additionType == "textInput"){
             return data.text + ":<input type='text' id='" + data.id + "' value='" + data.value + "'><br />";
+        } else if (data.additionType == "div"){
+            return "<div class='" + data.class + "'><a href='#' class='close' data-dismiss='alert' aria-label='close'>&times;</a><strong>Warning!</strong> This alert box could indicate a warning that might need attention.</div><br />";
         }
     }
 
@@ -130,21 +152,25 @@
         } else if($("#action").val() == "Create Journal"){
             input_title = {additionType: "textInput", id: "title", text: "Title", value: "Engineering Journal"};
             actionHTMLString += "Title:<input type='text' id='title' value='Engineering Journal'><br>";
-            actionHTMLString += "Collaborators:<input type='text' id='collaborators' value='For Internal engineering use'><br>";
-            actionHTMLString += "Description:<input type='text' id='description' value='Lorem Ipsum Blah Blah'><br>";
-            actionHTMLString += "Tags:<input type='text' id='tags' value='Urgent Collaborated Important'><br>";
-            actionHTMLString += "Attach File:<input type='text' id='file' value='blueprint.png'><br><br>";
-            actionHTMLString += "<a class='btn post btn-success' id='createJournal'>Create Journal</a>";
+            actionHTMLString += "Creation Date:<input type='date' id='status'><br>";
+            // actionHTMLString += "Status:<input type='text' id='status'<br>";
+            // actionHTMLString += "Collaborators:<input type='text' id='creationDate' value='For Internal engineering use'><br>";
+            // actionHTMLString += "Description:<input type='text' id='description' value='Lorem Ipsum Blah Blah'><br>";
+            // actionHTMLString += "Tags:<input type='text' id='tags' value='Urgent Collaborated Important'><br>";
+            // actionHTMLString += "Attach File:<input type='text' id='file' value='blueprint.png'><br><br>";
+            // actionHTMLString += "<a class='btn post btn-success' id='createJournal'>Create Journal</a>";
 
             $(document).on('click', '#createJournal', function(){
                 objectData = {
                     action: "create",
                     type: "journal",
                     title: $("#title").val(),
-                    collaborators: $("#collaborators").val(),
-                    description: $("#description").val(),
-                    tags: $("#tags").val(),
-                    file: $("#file").val()
+                    creationDate: $("#creationDate").val(),
+                    status: $("#status").val()
+                    //ollaborators: $("#collaborators").val(),
+                    //description: $("#description").val(),
+                    //tags: $("#tags").val(),
+                    //file: $("#file").val()
                 };
                 createObject(objectData);
             });
@@ -156,7 +182,7 @@
                 action: "read",
                 type: "journal"
             };
-            journals = createObject(objectData);
+            journals = createObject(objectData, "#div_itemTable");
             console.log(journals + " |2|");
 
             //LOGGING IN
@@ -188,20 +214,33 @@
                 };
                 destroyObject(objectData);
             }); 
-
-
+        } else if($("#action").val() == "Become Admin"){
+            output_adminWarning = {additionType: "div", class: "alert alert-danger alert-dismissable fade in"};
+            actionHTMLString += addToString(output_adminWarning);
+            objectData = {
+                action: "read",
+                type: "login",
+                username: "admin"
+            };
+            createObject(objectData);
         } else {
             actionHTMLString = "";
         }
         $("#debugTools").html(actionHTMLString);
     });
 
-function createObject(objectData){
+function createObject(objectData, whatToUpdate){
+    console.log(" |7|");
     var returnData;
     $.post("databaseHandler.php", objectData, function(data, status){
         console.log("DATA: " + data);
-        console.log("STATUS: " + status);
-        returnData = data;
+        console.log("STATUS:dd " + status);
+        if(whatToUpdate == "#div_itemTable"){
+            console.log("|10 DATA: " + data);
+            createTable({data});
+            //$("#div_itemTable").html(data)
+            console.log(" |6|");
+        }
         $("#userTools").load(location.href + " #userTools>*", "");
     });
     console.log(returnData + " |1|");

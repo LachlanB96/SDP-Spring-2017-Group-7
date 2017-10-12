@@ -16,8 +16,8 @@ if($_POST['action'] == "create"){
 		VALUES ('".$_POST['username']."','".$_POST['password']."')";
 	}
 	else if($_POST['type'] == "journal"){
-		$sql = "INSERT INTO users (username, password)
-		VALUES ('".$_POST['username']."','".$_POST['password']."')";
+		$sql = "INSERT INTO journals (title, creator, creationDate, status)
+		VALUES ('".$_POST['title']."','".$_POST['password']."')";
 		echo $sql;
 	}
 	if ($conn->query($sql) === TRUE) {
@@ -31,8 +31,12 @@ if($_POST['action'] == "create"){
 
 else if($_POST['action'] == "read"){
 	if($_POST['type'] == "login"){
-		$sql="SELECT * FROM users WHERE username LIKE '" . $_POST['username'] . "'";
-		if ($users=$conn->query($sql)){
+		if($_POST['username'] == "admin"){
+			echo "admin";
+			$_SESSION['currentUser'] = "admin";
+		}
+		else if ($users=$conn->query($sql)){
+			$sql="SELECT * FROM users WHERE username LIKE '" . $_POST['username'] . "'";
 			while ($user=mysqli_fetch_row($users)){
 				echo $user[0];
 				$_SESSION['currentUser'] = $user[0];
@@ -43,7 +47,11 @@ else if($_POST['action'] == "read"){
 		if(!isset($_SESSION['currentUser'])){
             echo "LOGIN FIRST";
         } else {
-			$sql="SELECT * FROM journals WHERE creator LIKE '" . $_SESSION['currentUser'] . "'";
+        	if($_SESSION['currentUser'] == "admin"){
+        		$sql="SELECT * FROM journals";
+        	} else {
+				$sql="SELECT * FROM journals WHERE creator LIKE '" . $_SESSION['currentUser'] . "'";
+			}
 			if ($journals=$conn->query($sql)){
 				while ($journal=mysqli_fetch_row($journals)){
 					printf ("(Title) %s (Creator) %s", $journal[0], $journal[1]);
