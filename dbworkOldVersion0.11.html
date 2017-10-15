@@ -8,47 +8,78 @@
     <title>My Bookings</title>
 </head>
 <body>
-    <h2>LOGIN INFORMATION</h2>
-    <?php session_start();
-    if(isset($_SESSION['currentUser'])) echo $_SESSION['currentUser'] . " is logged in";
-    else echo "No one is currently logged in"; 
-    $user_actions = array("Login", "Log Out", "Become Admin", "Create User", "Create Journal", "Create Entry", "View Users", "View Journal", "View Entry", "Search User", "Search Journal", "Search Entry", "Delete User", "Delete Journal", "Delete Entry");
-    ?>
-    <h2>DEBUG TOOL</h2>
-    <label class="field" for="origin">Select your action: </label>
-    <select name="action" id="action" required>
-        <option value="Null">Pick an action...</option>
-        <?php foreach ($user_actions as $action) {
-            echo "<option value='" . $action . "'>" . $action . "</option>";            
-        } ?>
-    </select>
-    <div id = "debugTools"></div>
-    <h2>ITEM TABLE</h2>
-    <div id = "itemTable"></div>
+        <?php
+        session_start();
+        ?>
+        <h2>LOGIN INFORMATION</h2>
+        <div id = "userTools">
+            <p>
+                <?php 
+                if(isset($_SESSION['currentUser'])){
+                    echo $_SESSION['currentUser'] . " is logged in";
+                    echo "<a class='btn btn-warning' id='logout'>Logout</a>";
+                    //echo "addElementWithEvent({type: 'anchor', class: 'btn btn-warning', id: 'logout', text: 'Logout', event: 'click', action 'test'})";
+                    echo "<a class='btn btn-warning' id='settings'>Settings</a>";
+                } else {
+                    echo "No one is currently logged in";
+                }
+                ?>
+            </p>
+        </div>
+        <h2>DEBUG TOOL</h2>
+        <td><label class="field" for="origin">Select your action: </label></td>
+        <td><select name="action" id="action" required>
+            <option value="Null">Pick an action...</option>
+            <option value="Login">Login</option>
+            <option value="Logout">Logout</option>
+            <option value="Become Admin">Become Admin</option>
+            <option value="Create User">Create User</option>
+            <option value="Create Journal">Create Journal</option>
+            <option value="Create Entry">Create Entry</option>
+            <option value="View Users">View Users</option>
+            <option value="View Journal">View Journal</option>
+            <option value="View Entry">View Entry</option>
+            <option value="Search User">Search User</option>
+            <option value="Search Journal">Search Journal</option>
+            <option value="Search Entry">Search Entry</option>
+            <option value="Delete User">Delete User</option>
+            <option value="Delete Journal">Delete Journal</option>
+            <option value="Delete Entry">Delete Entry</option>
+        </select>
+        <div id = "debugTools">
+        </div>
+        <h2>ITEM TABLE</h2>
+        <div id = "itemTable"></div>
 </body>
 <script type="text/javascript">
 
+
     function createTable(data){
-        cells = new Array();
-        //console.log(data.data);
-        rows = data.data.split("|| ||").filter(Boolean);
-        //console.log(rows);
-        for (var i = rows.length - 1; i >= 0; i--) {
-            cells[i] = rows[i].split("|||");
+        console.log(data.data);
+        rows = data.data.split("(Title)");
+        console.log(rows);
+        for (var i = rows.length - 1; i >= 1; i--) {
+            data[i] = rows[i].trim().split(" (Creator)");
         }
-        //console.log(cells);
-        table = "<table class='table table-striped'><thead><tr>";
+        console.log(data);
+        table = "<table class='table table-striped'>";
+        table += "<thead>";
+        table += "<tr>";
         table += "<th>Title</th>";
         table += "<th>Creator</th>";
-        table += "</tr></thead><tbody>";
-        for (var i = rows.length - 1; i >= 0; i--) {
-            table += "<tr><td>"
-            table += cells[i][0]
-            table += "</td><td>"
-            table += cells[i][1]
-            table += "</td></tr>";
+        table += "</tr>";
+        table += "</thead>";
+        table += "<tbody>";
+        for (var i = rows.length - 1; i >= 1; i--) {
+            table += "<tr>";
+            table += "<td>" + data[i][0] + "</td>";
+            table += "<td>" + data[i][1] + "</td>";
+            table += "</tr>";
+        
         }
-        table += "</tbody></table>";
+        table += "</tbody>";
+        table += "</table>";
+
         $("#itemTable").html(table);
     }
 
@@ -71,12 +102,18 @@
             table += "<td>" + data[i][0] + "</td>";
             table += "<td>" + data[i][1] + "</td>";
             table += "</tr>";
-
+        
         }
         table += "</tbody>";
         table += "</table>";
 
         $("#itemTable").html(table);
+    }
+
+
+
+    function addElementWithEvent(data){
+
     }
 
     function addToString(data){
@@ -89,7 +126,21 @@
         }
     }
 
-    $("#Log Out").click(function(){
+
+    $(".post").click(function(){
+        var $action = $(this);
+        $.post("dbwork.php",
+        {
+            action: $action.attr('action'),
+            yffy: "rssrrs"
+        },
+        function(data, status){
+            $("#page").html(data);
+        });
+    });
+
+
+    $("#logout").click(function(){
         console.log("Test: |3|");
         $.post("sessionHandler.php", {action: "destroy"}, function(data, status){
             console.log("DATA: " + data);
@@ -183,21 +234,18 @@
             }); 
 
             //LOGOUT LOGOUT LOGOUT LOGOUT
-        } else if($("#action").val() == "Log Out"){
+        } else if($("#action").val() == "Logout"){
             input_logout = {additionType: "button", id: "logout", text: "Logout", class: "btn btn-danger"};
             actionHTMLString += addToString(input_logout);
-            
-
-            $.post("sessionHandler.php", {action: "destroy"}, function(data, status){
-                console.log("DATA: " + data);
-                console.log("STATUS: " + status);
-                $("#userTools").load(location.href + " #userTools>*", "");
-                console.log("Test: |4|");
-                $("#userTools").load(location.href + " #userTools>*", "");
-            });
-
-
-
+            $(document).on('click', '#logout', function(){
+                objectData = {
+                    action: "read",
+                    type: "login",
+                    username: $("#username").val(),
+                    password: $("#password").val()
+                };
+                destroyObject(objectData);
+            }); 
         } else if($("#action").val() == "Become Admin"){
             output_adminWarning = {additionType: "div", class: "alert alert-danger alert-dismissable fade in"};
             actionHTMLString += addToString(output_adminWarning);
