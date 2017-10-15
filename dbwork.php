@@ -9,11 +9,13 @@
 </head>
 <body>
     <h2>LOGIN INFORMATION</h2>
-    <?php session_start();
-    if(isset($_SESSION['currentUser'])) echo $_SESSION['currentUser'] . " is logged in";
-    else echo "No one is currently logged in"; 
-    $user_actions = array("Login", "Log Out", "Become Admin", "Create User", "Create Journal", "Create Entry", "View Users", "View Journal", "View Entry", "Search User", "Search Journal", "Search Entry", "Delete User", "Delete Journal", "Delete Entry");
-    ?>
+    <div id="loginInformation">
+        <?php session_start();
+        if(isset($_SESSION['currentUser'])) echo $_SESSION['currentUser'] . " is logged in";
+        else echo "No one is currently logged in"; 
+        $user_actions = array("Login", "Log Out", "Become Admin", "Create User", "Create Journal", "Create Entry", "View Users", "View Journal", "View Entry", "Search User", "Search Journal", "Search Entry", "Delete User", "Delete Journal", "Delete Entry");
+        ?>
+    </div>
     <h2>DEBUG TOOL</h2>
     <label class="field" for="origin">Select your action: </label>
     <select name="action" id="action" required>
@@ -29,9 +31,10 @@
 <script type="text/javascript">
 
     function createTable(data){
-        cells = new Array();
+        console.log(data);
+        cells = [];
         //console.log(data.data);
-        rows = data.data.split("|| ||").filter(Boolean);
+        rows = data.split("|| ||").filter(Boolean);
         //console.log(rows);
         for (var i = rows.length - 1; i >= 0; i--) {
             cells[i] = rows[i].split("|||");
@@ -41,11 +44,11 @@
         table += "<th>Title</th>";
         table += "<th>Creator</th>";
         table += "</tr></thead><tbody>";
-        for (var i = rows.length - 1; i >= 0; i--) {
-            table += "<tr><td>"
-            table += cells[i][0]
-            table += "</td><td>"
-            table += cells[i][1]
+        for (i = rows.length - 1; i >= 0; i--) {
+            table += "<tr><td>";
+            table += cells[i][0];
+            table += "</td><td>";
+            table += cells[i][1];
             table += "</td></tr>";
         }
         table += "</tbody></table>";
@@ -53,11 +56,13 @@
     }
 
     function displayUsers(data){
-        creds = data.data.split("|| ||");
+        console.log("DISPLAYING USERS: " + data);
+        console.log(data);
+        console.log(data.data);
+        creds = data.split("|| ||");
         for (var i = rows.length - 1; i >= 0; i--) {
             data[i][0], data[i][1] = rows[i].split("|||");
         }
-        console.log(data);
         table = "<table class='table table-striped'>";
         table += "<thead>";
         table += "<tr>";
@@ -66,7 +71,7 @@
         table += "</tr>";
         table += "</thead>";
         table += "<tbody>";
-        for (var i = rows.length - 1; i >= 1; i--) {
+        for (i = rows.length - 1; i >= 1; i--) {
             table += "<tr>";
             table += "<td>" + data[i][0] + "</td>";
             table += "<td>" + data[i][1] + "</td>";
@@ -89,16 +94,7 @@
         }
     }
 
-    $("#Log Out").click(function(){
-        console.log("Test: |3|");
-        $.post("sessionHandler.php", {action: "destroy"}, function(data, status){
-            console.log("DATA: " + data);
-            console.log("STATUS: " + status);
-            $("#userTools").load(location.href + " #userTools>*", "");
-            console.log("Test: |4|");
-        });
-        console.log("Test: |5|");
-    });
+
 
     $("#action").change(function(){
         var actionHTMLString = "";
@@ -117,7 +113,7 @@
                     type: "user",
                     username: $("#username").val(),
                     password: $("#password").val()
-                }
+                };
                 createObject(objectData);
             });
         } else if($("#action").val() == "Create Journal"){
@@ -153,7 +149,8 @@
                 type: "user"
             };
             users = createObject(objectData, "#div_itemTable");
-            displayUsers(users);
+            console.log(users);
+            // displayUsers(users); REMOVED THIS LINE AND CHANGED NOTHING BUT NOW THE PROGRAM WORKS... LOOK INTO THIS FUTURE CODER
             console.log(users + " |2|");
 
             //Viewing journals
@@ -191,9 +188,8 @@
             $.post("sessionHandler.php", {action: "destroy"}, function(data, status){
                 console.log("DATA: " + data);
                 console.log("STATUS: " + status);
-                $("#userTools").load(location.href + " #userTools>*", "");
+                $("#loginInformation").load(location.href + " #loginInformation>*", "");
                 console.log("Test: |4|");
-                $("#userTools").load(location.href + " #userTools>*", "");
             });
 
 
@@ -221,14 +217,49 @@ function createObject(objectData, whatToUpdate){
         console.log("STATUS:dd " + status);
         if(whatToUpdate == "#div_itemTable"){
             console.log("|10 DATA: " + data);
-            createTable({data});
+            createTable(data);
             //$("#div_itemTable").html(data)
             console.log(" |6|");
         }
         $("#userTools").load(location.href + " #userTools>*", "");
+        $("#loginInformation").load(location.href + " #loginInformation>*", "");
     });
     console.log(returnData + " |1|");
     return returnData;
-};
+}
 
 </script>
+    <script type="text/javascript">
+        function validateSearchType(){
+            var type = document.getElementsByName("search_type");
+            var ischecked_method = false;
+            for ( var i = 0; i < type.length; i++) {
+                if(type[i].checked) {
+                    ischecked_method = true;
+                    return true;
+                }
+            }
+            alert("Please select a search type!");
+            return false;
+        }
+        function validateSelectedFlight(){
+            var type = document.getElementsByName("flight");
+            var ischecked_method = false;
+            for ( var i = 0; i < type.length; i++) {
+                if(type[i].checked) {
+                    ischecked_method = true;
+                    return true;
+                }
+            }
+            alert("Please select a flight to continue!");
+            return false;
+        }
+    </script>
+    <script type="text/javascript">
+        $('.row-select tr').click(function(event) {
+            $(".row-select tr").removeClass("selected");
+            $(this).toggleClass('selected');
+            $(this).find('td input:radio').prop('checked', true);
+        });
+    </script>
+    </html>
