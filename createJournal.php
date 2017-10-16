@@ -9,8 +9,6 @@
 	include("navigation.php");
 	var_dump($_SESSION);
 	?>
-	<div class="container">
-		<div class="jumbotron">
 			<?php
 			session_start(); 
 			$journalName = "Planning";
@@ -25,8 +23,6 @@
 			</form>
 			<a type="button" class="btn btn-warning" id="viewJournal">Go Back</a>
             <a type="button" class="btn btn-success" id="createJournal">Create</a>
-		</div>
-	</div>
 	<script type="text/javascript">
 		$('#createJournal').on('click', function() {
 			$.post("journalHandler.php",
