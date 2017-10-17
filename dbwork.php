@@ -8,6 +8,7 @@
     <title>My Bookings</title>
 </head>
 <body>
+    <a href="journal.php">Journal</a>
     <h2>LOGIN INFORMATION</h2>
     <div id="loginInformation">
         <?php session_start();

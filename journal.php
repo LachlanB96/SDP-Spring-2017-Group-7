@@ -2,24 +2,36 @@
 <head>
 	<?php
 	include("headers.php");
+	session_start();
 	?>
 </head>
 <body>
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-12 nav-padding">
 				<ul class="nav nav-pills">
 					<li class="active">
 						<a href="#">Home</a>
 					</li>
-					<li>
+					<li class="disabled">
 						<a href="#">Profile</a>
 					</li>
-					<li class="disabled">
-						<a href="#">Messages</a>
+					<li>
+						<a href="dbwork.php">Developer</a>
 					</li>
+					<li>
+						<input type="text" style='display:inline'>
+					</li>
+					<!-- <li class="pull-right">
+						<div class="input-group ">
+							<div class="input-group-addon">@</div>
+							<input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Username">
+						</div>
+					</li> -->
+					
 					<li class="dropdown pull-right">
-						 <a href="#" data-toggle="dropdown" class="dropdown-toggle">Dropdown<strong class="caret"></strong></a>
+
+						<a href="#" data-toggle="dropdown" class="dropdown-toggle">Dropdown<strong class="caret"></strong></a>
 						<ul class="dropdown-menu">
 							<li>
 								<a href="#">Action</a>
@@ -35,6 +47,9 @@
 							<li>
 								<a href="#">Separated link</a>
 							</li>
+							<li class="dropdown pull-right">
+								<input type="text">
+							</li>
 						</ul>
 					</li>
 				</ul>
@@ -45,34 +60,36 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="row">
-					<div class="col-md-1">
-						 <span class="label label-default">Label</span>
+					<div class="col-md-2">
+						<h3>
+							Tag Search
+						</h3>
 					</div>
-					<div class="col-md-11">
+					<div class="col-md-10">
 						<div class="row">
-							<div class="col-md-2">
-								 
-								<button type="button" class="btn btn-outline">
-									Default
+							<div class="col-md-1">
+
+								<button type="button" class="btn">
+									Urgent
 								</button>
 							</div>
-							<div class="col-md-2">
-								 
+							<div class="col-md-1">
+
 								<button type="button" class="btn btn-default">
-									Default
+									Important
 								</button>
 							</div>
-							<div class="col-md-2">
-								 
+							<div class="col-md-1">
+
 								<button type="button" class="btn btn-default">
-									Default
+									Notes
 								</button>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-1">
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-1">
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-1">
 							</div>
 						</div>
 					</div>
@@ -81,17 +98,15 @@
 					<div class="col-md-12">
 						<div class="page-header">
 							<h1 class="text-center">
-								LayoutIt!
+								<?=$_SESSION['currentUser']?>'s Journal
 							</h1>
 						</div>
-						<h3>
-							h3. Lorem ipsum dolor sit amet.
-						</h3>
+						<div id="journalTable"></div>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-2">
-						 
+
 						<button type="button" class="btn btn-default">
 							Default
 						</button>
@@ -105,52 +120,69 @@
 					<div class="col-md-2">
 					</div>
 					<div class="col-md-2">
-						<ul class="nav nav-pills">
-							<li class="active">
-								 <a href="#"> <span class="badge pull-right">42</span> Home</a>
-							</li>
-							<li>
-								 <a href="#"> <span class="badge pull-right">16</span> More</a>
-							</li>
-						</ul>
+						<label class="form-check-label">
+							<input class="form-check-input" type="checkbox"> Only show active entries
+						</label>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-			<div class="jumbotron">
-				<h2>
-					Hello, world!
-				</h2>
-				<p>
-					This is a template for a simple marketing or informational website. It includes a large callout called the hero unit and three supporting pieces of content. Use it as a starting point to create something more unique.
-				</p>
-				<p>
-					<a class="btn btn-primary btn-large" href="#">Learn more</a>
-				</p>
-			</div>
-
-			<div class="row">
-				<div class="col-md-4">
-					<ul class="nav nav-pills">
-						<li class="active">
-							 <a href="#"> <span class="badge pull-right">42</span> Home</a>
-						</li>
-						<li>
-							 <a href="#"> <span class="badge pull-right">16</span> More</a>
-						</li>
-					</ul>
-				</div>
-				<div class="col-md-4">
-				</div>
-				<div class="col-md-4">
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
 </body>
+<script type="text/javascript">
+
+	function createTable(data){
+		console.log(data);
+		cells = [];
+        //console.log(data.data);
+        rows = data.split("|| ||").filter(Boolean);
+        //console.log(rows);
+        for (var i = rows.length - 1; i >= 0; i--) {
+        	cells[i] = rows[i].split("|||");
+        }
+        //console.log(cells);
+        table = "<table class='table'><thead><tr>";
+        table += "<th>Title</th>";
+        table += "<th>Creator</th>";
+        table += "</tr></thead><tbody>";
+        for (i = rows.length - 1; i >= 0; i--) {
+        	table += "<tr><td>";
+        	table += cells[i][0];
+        	table += "</td><td>";
+        	table += cells[i][1];
+        	table += "</td></tr>";
+        }
+        table += "</tbody></table>";
+        $("#journalTable").html(table);
+    }
+
+    function createObject(objectData, whatToUpdate){
+    	console.log(" |7|");
+    	var returnData;
+    	$.post("databaseHandler.php", objectData, function(data, status){
+    		console.log("DATA: " + data);
+    		console.log("STATUS:dd " + status);
+    		if(whatToUpdate == "#div_itemTable"){
+    			console.log("|10 DATA: " + data);
+    			createTable(data);
+            //$("#div_itemTable").html(data)
+            console.log(" |6|");
+        }
+        $("#userTools").load(location.href + " #userTools>*", "");
+        $("#loginInformation").load(location.href + " #loginInformation>*", "");
+    });
+    	console.log(returnData + " |1|");
+    	return returnData;
+    }
+
+    $(document).ready(function(){
+    	input_title = {additionType: "textOutput", id: "information", text: "Here are your journals: "};
+    	objectData = {
+    		action: "read",
+    		type: "journal"
+    	};
+    	journals = createObject(objectData, "#div_itemTable");
+
+    });
+</script>
 </html>
