@@ -37,11 +37,11 @@ if($_POST['action'] == "create"){
 
 else if($_POST['action'] == "read"){
 	if($_POST['type'] == "login"){
+		$sql="SELECT * FROM users WHERE username LIKE '" . $_POST['username'] . "'";
 		if($_POST['username'] == "admin"){
 			echo "admin";
 			$_SESSION['currentUser'] = "admin";
 		} else if ($users=$conn->query($sql)){
-			$sql="SELECT * FROM users WHERE username LIKE '" . $_POST['username'] . "'";
 			while ($user=mysqli_fetch_row($users)){
 				echo $user[0];
 				$_SESSION['currentUser'] = $user[0];
@@ -49,11 +49,11 @@ else if($_POST['action'] == "read"){
 		}
 	} else if($_POST['type'] == "journal"){
 		if(!isset($_SESSION['currentUser'])){
-            echo "LOGIN FIRST";
-        } else {
-        	if($_SESSION['currentUser'] == "admin"){
-        		$sql="SELECT * FROM journals";
-        	} else {
+			echo "LOGIN FIRST";
+		} else {
+			if($_SESSION['currentUser'] == "admin"){
+				$sql="SELECT * FROM journals";
+			} else {
 				$sql="SELECT * FROM journals WHERE creator LIKE '" . $_SESSION['currentUser'] . "'";
 			}
 			if ($journals=$conn->query($sql)){
@@ -63,6 +63,38 @@ else if($_POST['action'] == "read"){
 
 			}
 		} 
+	} else if($_POST['type'] == "journalEntries"){
+		$sql="SELECT * FROM journalEntries WHERE journal LIKE '" . $_POST['journalName'] . "'";
+		if ($journals=$conn->query($sql)){
+			while ($journal=mysqli_fetch_row($journals)){
+				echo $journal[0];
+				echo "|||";
+				echo $journal[1];
+				echo "|||";
+				echo $journal[2];
+				echo "|||";
+				echo $journal[3];
+				echo "|||";
+				echo $journal[4];
+				echo "|| ||";
+			}
+		}
+	} else if($_POST['type'] == "entries"){
+		$sql="SELECT * FROM journalEntries WHERE title LIKE '" . $_POST['entryName'] . "'";
+		if ($entries=$conn->query($sql)){
+			while ($entry=mysqli_fetch_row($entries)){
+				echo $entry[0];
+				echo "|||";
+				echo $entry[1];
+				echo "|||";
+				echo $entry[2];
+				echo "|||";
+				echo $entry[3];
+				echo "|||";
+				echo $entry[4];
+				echo "|| ||";
+			}
+		}
 	} else if($_POST['type'] == "user"){
 		$sql="SELECT * FROM users";
 		if ($users=$conn->query($sql)){
@@ -75,10 +107,10 @@ else if($_POST['action'] == "read"){
 		}
 	} else if($_POST['type'] == "usersdsd"){
 		if(!isset($_SESSION['currentUser'])){
-            echo "LOGIN FIRST";
-        } else {
+			echo "LOGIN FIRST";
+		} else {
         	//if($_SESSION['currentUser'] == "admin"){
-    		$sql="SELECT * FROM users";
+			$sql="SELECT * FROM users";
         	//} else {
 			//	$sql="SELECT * FROM journals WHERE creator LIKE '" . $_SESSION['currentUser'] . "'";
 			//}

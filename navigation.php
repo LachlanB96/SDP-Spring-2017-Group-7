@@ -21,27 +21,41 @@
 						</div>
 					</li> -->
 					
+					<?php
+					if(isset($_SESSION['currentUser'])){ ?>
 					<li class="dropdown pull-right">
-
-						<a href="#" data-toggle="dropdown" class="dropdown-toggle">Logged in: <?=$_SESSION['currentUser']?><strong class="caret"></strong></a>
+						<a href="#" data-toggle="dropdown" class="btn dropdown-toggle btn-secondary">Logged in: <?=$_SESSION['currentUser']?><strong class="caret"></strong></a>
 						<ul class="dropdown-menu">
 							<li>
-								<a href="#">Action</a>
+								<a href="#">Toggle Theme</a>
 							</li>
 							<li>
-								<a href="#">Another action</a>
-							</li>
-							<li>
-								<a href="#">Something else here</a>
+								<a href="#">View All Journals</a>
 							</li>
 							<li class="divider">
 							</li>
 							<li>
-								<a href="#">Separated link</a>
+								<a id="logout">Logout!</a>
 							</li>
 						</ul>
 					</li>
+					<?php }
+					else { ?>
+					<li class="pull-right">
+							<a href="home.php">Sign In</a>
+					</li>
+					<?php } ?>
 				</ul>
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		$("#logout").click(function(){
+			console.log("cya");
+			$.post("sessionHandler.php", {action: "logout"}, function(data, status){
+				console.log("DATA: " + data);
+				console.log("STATUS: " + status);
+				window.location.href = "home.php";
+			});
+		});
+	</script>

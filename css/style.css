@@ -8,7 +8,22 @@
 
 .nav li a{
     color: #FFF;
-    
+
+}
+
+.nav li a:hover{
+    color: #FFF;
+    background-color: #023E8E;
+}
+
+.nav li a:focus{
+    color: #FFF;
+    background-color: #023E8E;
+}
+
+.nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
+    color: #FFF;
+    background-color: #023E8E;
 }
 
 body{
@@ -24,103 +39,21 @@ body{
     padding: 0;
 }
 
-
-input[type="text"] {
-  display: block;
-  margin: 0;
-  width: 100%;
-  font-family: sans-serif;
-  font-size: 18px;
-  appearance: none;
-  box-shadow: none;
-  border-radius: none;
-}
-input[type="text"]:focus {
-  outline: none;
+.dropdown-menu {
+    background-color: #023E8E;
 }
 
+#entryDescription{
+    background-color: #FFF;
+}
 
-.style input[type="text"] {
-  padding: 10px;
-  border: solid 1px #fff;
-  box-shadow: inset 1px 1px 2px 0 #707070;
-  transition: box-shadow 0.3s;
-}
-.style input[type="text"]:focus,
-.style input[type="text"].focus {
-  box-shadow: inset 1px 1px 2px 0 #c9c9c9;
-  background-color: #FF0000;
-}
 
 tr{
-    background-color: #F0EEEF;
+    background-color: #FFF;
 }
 
-
-/*Bootstrap button outline override*/
-.btn-outline {
-    background-color: transparent;
-    color: inherit;
-    transition: all .5s;
-    border-radius: 0;
-}
-
-.btn-outline:hover
-{
-    color: #fff;
-}
-
-.btn-cancel {
-    width: 33%;
-}
-.btn-confirm {
-    width: 66%;
-}
-
-.row-select{
-    transition: all .5s;
-}
-
-.row-select tr:hover {
-    background-color: #fff;
-    border-color: #337ab7;
-}
-
-tr.selected{
-    background-color: #337ab7;
-    color: #fff;
-    outline: thin solid;
-}
-
-tr.selected:hover{
-    background-color: #337ab7;
-    color: #fff;
-    outline: thick solid;
-}
-
-
-.cb input {
-    position: relative;
-    z-index: -9999;
-}
-
-.cb span {
-    width: 10px;
-    height: 10px;
-    opacity: 0.3;
-}
-
-.cb input:checked + span {
-    opacity: 1;
-}
-
-
-
-#inlineFormInputGroup{
-    width: 20%;
-}
-
-.btn{
-    background-color: #655F5F;
-    color: #FFF;
+.two-options{
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
 }
