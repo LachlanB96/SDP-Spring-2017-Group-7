@@ -23,7 +23,7 @@ if($_POST['action'] == "create"){
 	}
 	else if($_POST['type'] == "journal"){
 		$sql = "INSERT INTO journals (title, creator, creationDate, status)
-		VALUES ('".$_POST['title']."','".$_POST['password']."')";
+		VALUES ('".$_POST['title']."','".$_SESSION['currentUser']."','".$_POST['creationDate']."','active')";
 		echo $sql;
 	}
 	if ($conn->query($sql) === TRUE) {

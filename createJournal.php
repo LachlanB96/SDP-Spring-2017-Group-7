@@ -2,60 +2,88 @@
 <head>
 	<?php
 	include("headers.php");
+	session_start();
 	?>
 </head>
 <body>
-	<?php
-	include("navigation.php");
-	var_dump($_SESSION);
-	?>
-			<?php
-			session_start(); 
-			$journalName = "Planning";
-			?>
-			<h3>New Entry for <?=$journalName?></h3>
-			<p>Title* <input type="text" name="username" value="default" id="inputUsername"></p><br>
-			<p>Collaborators <input type="text" name="username" value="default" id="inputUsername"></p><br>
-			<p>Description <textarea rows="4" cols="40" id="contents"></textarea></p><br>
-			<p>Tags <input type="text" name="username" value="default" id="inputUsername"></p>
-			<form action="upload.php" method="post" enctype="multipart/form-data">
-				<p>Select image to upload:<input type="file" name="fileToUpload" id="fileToUpload"><input type="submit" value="Upload Image" name="submit"></p>
-			</form>
-			<a type="button" class="btn btn-warning" id="viewJournal">Go Back</a>
-            <a type="button" class="btn btn-success" id="createJournal">Create</a>
-	<script type="text/javascript">
-		$('#createJournal').on('click', function() {
-			$.post("journalHandler.php",
-            {
-                action: "write",
-                type: "entry",
-                journalName: "test1",
-                creator: "default",
-                contents: $('#contents').val(),
-                entryName: $('#inputUsername').val()
-            },
-            function(data, status){
-                console.log(data);
-                console.log(status);
-            });
-		});
-		// $('#upload').on('click', function() {
-		// 	var file_data = $('#fileToUpload').prop('files')[0];   
-		// 	var form_data = new FormData();                  
-		// 	form_data.append('file', file_data);
-		// 	alert(form_data);                             
-		// 	$.ajax({
-		// 		url: 'upload.php',
-		// 		cache: false,
-		// 		contentType: false,
-		// 		processData: false,
-		// 		data: form_data,                         
-		// 		type: 'post',
-		// 		success: function(php_script_response){
-		// 			alert(php_script_response);
-		// 		}
-		// 	});
-		// });
-	</script>
+	<?php include("navigation.php"); ?>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				
+				<div class="row">
+					<div class="col-md-12">
+						<div class="page-header">
+							<h1 class="text-center">
+								Creating Journal
+							</h1>
+						</div>
+						<div id="journalTable"></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2" style='text-align: right;'>
+						Journal Name:
+					</div>
+					<div class="col-md-4">
+						<input type="text" style='width: 100%;' id="input_journalName">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-2">
+						
+					</div>
+					<div class="col-md-2">
+					</div>
+					<div class="col-md-2">
+					</div>
+					<div class="col-md-2">
+					</div>
+					<div class="col-md-2">
+						<a type="button" class="btn btn-default" href="journal.php">
+							Go Back
+						</a>
+					</div>
+					<div class="col-md-2">
+						<a type="button" class="btn btn-default" id="createJournal">
+							Create
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
+<script type="text/javascript">
+
+
+
+
+
+
+	$(document).ready(function(){
+		$("#createJournal").click(function(event) {
+			date = new Date();
+			objectData = {
+				action: "create",
+				type: "journal",
+				title: $("#input_journalName").val(),
+				creationDate: (date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear())
+			};
+			$.post("databaseHandler.php", objectData, function(data, status){
+				window.location.href = "journal.php";
+			});
+
+		});
+	});
+
+
+
+
+
+
+
+
+
+</script>
 </html>

@@ -1,9 +1,14 @@
 
 .nav{
     border-left: 100px;
-    background-color: #333333;
+    background-color: #023E8E;
     margin-bottom: 30px;
     width: 100%;
+}
+
+.nav li a{
+    color: #FFF;
+    
 }
 
 body{
