@@ -3,11 +3,13 @@
 	<?php
 	include("headers.php");
 	session_start();
-	$_SESSION['currentJournal'] = "test1";
-	?>
-	<script type="text/javascript">
-		var journalName = "test1";
-	</script>
+	if(isset($_POST['entryName'])){
+		$_SESSION['entryName'] = $_POST['entryName'];
+		?>
+		<script type="text/javascript">
+			var entryName = "<?=$_POST['entryName']?>";
+		</script>
+	<?php } ?>
 </head>
 <body>
 	<?php include("navigation.php"); ?>
@@ -53,7 +55,7 @@
 					<div class="col-md-12">
 						<div class="page-header">
 							<h1 class="text-center">
-								Journal: <?=$_SESSION['currentJournal']?>
+								Journal: <?=$_SESSION['entryName']?>
 							</h1>
 						</div>
 						<div id="journalEntriesTable"></div>
@@ -87,6 +89,16 @@
 </body>
 <script type="text/javascript">
 
+	$("#journalEntriesTable").on("click", "tr", function(event){
+		console.log($(this)["0"].id);
+		var url = 'entry.php';
+		var form = $('<form action="' + url + '" method="post">' +
+			'<input type="text" name="currentEntry" value="' + $(this)["0"].id + '" />' +
+			'</form>');
+		$('body').append(form);
+		form.submit();
+	});
+
 	function createTable(data){
 		console.log(data);
 		cells = [];
@@ -102,7 +114,7 @@
         table += "<th>Date Created</th>";
         table += "</tr></thead><tbody>";
         for (i = rows.length - 1; i >= 0; i--) {
-        	table += "<tr><td>";
+        	table += "<tr id='"+cells[i][0]+"'><td>";
         	table += cells[i][0];
         	table += "</td><td>";
         	table += cells[i][4];
@@ -118,7 +130,7 @@
     	objectData = {
     		action: "read",
     		type: "journalEntries",
-    		journalName: journalName
+    		journalName: entryName
     	};
     	$.post("databaseHandler.php", objectData, function(data, status){
     		console.log("DATA: " + data);

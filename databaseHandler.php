@@ -124,6 +124,26 @@ else if($_POST['action'] == "read"){
 	}
 }
 
+else if($_POST['action'] == "search"){
+	if($_POST['type'] == "journal"){
+		if(!isset($_SESSION['currentUser'])){
+			echo "LOGIN FIRST";
+		} else {
+			if($_SESSION['currentUser'] == "admin"){
+				$sql="SELECT * FROM journals";
+			} else {
+				$sql="SELECT * FROM journals WHERE creator LIKE '" . $_SESSION['currentUser'] . "' AND title LIKE '" . $_POST['search'] . "%'";
+			}
+			if ($journals=$conn->query($sql)){
+				while ($journal=mysqli_fetch_row($journals)){
+					printf ("%s|||%s|| ||", $journal[0], $journal[1]);
+				}
+
+			}
+		} 
+	}
+}
+
 
 
 if($_POST['action'] == "write"){

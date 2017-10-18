@@ -12,36 +12,43 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="row">
-					<div class="col-md-2">
-						<h3>
-							Tag Search
-						</h3>
-					</div>
-					<div class="col-md-10">
+					<div class="col-md-6">
 						<div class="row">
-							<div class="col-md-1">
-
+							<div class="col-md-2">
+								<h3>
+									Tag Search
+								</h3>
+							</div>
+							<div class="col-md-10">
 								<button type="button" class="btn">
 									Urgent
 								</button>
-							</div>
-							<div class="col-md-1">
 
 								<button type="button" class="btn btn-default">
 									Important
 								</button>
-							</div>
-							<div class="col-md-1">
 
 								<button type="button" class="btn btn-default">
 									Notes
 								</button>
+
 							</div>
-							<div class="col-md-1">
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="row">
+							<div class="col-md-2">
+								<h3>
+									Word Search
+								</h3>
 							</div>
-							<div class="col-md-1">
+							<div class="col-md-6">
+								<input type="text" id="input_wordSearch">
 							</div>
-							<div class="col-md-1">
+							<div class="col-md-2">
+								<a type="button" class="btn btn-default" id="submit_wordSearch">
+									Search Journals
+								</a>
 							</div>
 						</div>
 					</div>
@@ -83,6 +90,31 @@
 </body>
 <script type="text/javascript">
 
+	$("#submit_wordSearch").click(function(){
+		console.log($("#input_wordSearch").val());
+		objectData = {
+    		action: "search",
+    		type: "journal",
+    		search: $("#input_wordSearch").val()
+    	};
+		$.post("databaseHandler.php", objectData, function(data, status){
+			console.log("DATA: " + data);
+			console.log("STATUS:dd " + status);
+			console.log(" |6|");
+			createTable(data);
+		});
+	})
+
+	$("#journalTable").on("click", "tr", function(event){
+		console.log($(this)["0"].id);
+		var url = 'journalEntries.php';
+		var form = $('<form action="' + url + '" method="post">' +
+			'<input type="text" name="entryName" value="' + $(this)["0"].id + '" />' +
+			'</form>');
+		$('body').append(form);
+		form.submit();
+	});
+
 	function createTable(data){
 		console.log(data);
 		cells = [];
@@ -98,7 +130,7 @@
         table += "<th>Creator</th>";
         table += "</tr></thead><tbody>";
         for (i = rows.length - 1; i >= 0; i--) {
-        	table += "<tr><td>";
+        	table += "<tr id='"+cells[i][0]+"'><td>";
         	table += cells[i][0];
         	table += "</td><td>";
         	table += cells[i][1];
@@ -128,7 +160,6 @@
     }
 
     $(document).ready(function(){
-    	input_title = {additionType: "textOutput", id: "information", text: "Here are your journals: "};
     	objectData = {
     		action: "read",
     		type: "journal"

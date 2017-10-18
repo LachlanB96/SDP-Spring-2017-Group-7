@@ -11,9 +11,6 @@
 					<li>
 						<a href="dbwork.php">Developer</a>
 					</li>
-					<li>
-						<input type="text" style='display:inline'>
-					</li>
 					<!-- <li class="pull-right">
 						<div class="input-group ">
 							<div class="input-group-addon">@</div>

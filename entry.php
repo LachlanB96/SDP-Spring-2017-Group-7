@@ -3,11 +3,13 @@
 	<?php
 	include("headers.php");
 	session_start();
-	$_SESSION['currentEntry'] = "test entry 2";
-	?>
-	<script type="text/javascript">
-		var currentEntry = "test entry 2";
-	</script>
+	if(isset($_POST['currentEntry'])){
+		$_SESSION['currentEntry'] = $_POST['currentEntry'];
+		?>
+		<script type="text/javascript">
+			var currentEntry = "<?=$_POST['currentEntry']?>";
+		</script>
+	<?php } ?>
 </head>
 <body>
 	<?php include("navigation.php"); ?>
