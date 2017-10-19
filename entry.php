@@ -53,6 +53,9 @@
 						</a>
 					</div>
 					<div class="col-md-2">
+						<a type="button" class="btn btn-default" id="input_delete">
+							Delete Entry
+						</a>
 					</div>
 					<div class="col-md-2">
 					</div>
@@ -107,7 +110,22 @@
 		$('body').append(form);
 		form.submit();
 		console.log(entryArray);
-	})
+	});
+
+
+$("#input_delete").click(function(){
+		objectData = {
+			action: "read",
+			type: "entries",
+			entryName: currentEntry
+		};
+		$.post("databaseHandler.php", objectData, function(data, status){
+			console.log("DATA: " + data);
+			console.log("STATUS:dd " + status);
+			window.location.href = "journal.php";
+	});
+});
+
 </script>
 <?php
 var_dump($_SESSION);

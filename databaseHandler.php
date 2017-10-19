@@ -172,6 +172,16 @@ else if($_POST['action'] == "search"){
 		} 
 	}
 }
+else if($_POST['action'] == "delete"){
+	if($_POST['type'] == "entry"){
+		$sql="DELETE FROM journalEntries WHERE title = '" . $_POST['entryName'] . "' AND creator = '" . $_SESSION['currentUser'] . "'";
+		if ($conn->query($sql) === TRUE) {
+			echo "New record created successfully";
+		} else {
+			echo "Error: " . $sql . "<br>" . $conn->error;
+		}
+	}
+}
 
 
 
