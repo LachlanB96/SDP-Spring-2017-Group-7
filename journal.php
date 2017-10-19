@@ -103,7 +103,7 @@
 			console.log(" |6|");
 			createTable(data);
 		});
-	})
+	});
 
 	$("#journalTable").on("click", "tr", function(event){
 		console.log($(this)["0"].id);

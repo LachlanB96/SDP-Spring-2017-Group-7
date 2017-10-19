@@ -24,7 +24,7 @@
                     <div class="col-md-12">
                         <div class="page-header">
                             <h3 class="text-center">
-                                Please sign in or create an account to access all the features The Redbook has to offer!
+                                Please sign in or create an account to access all the features The Redbook has to offer!fggfgklmfklmf kjfkmkm sknndskndklnfnfgjn g djkngj
                             </h3>
                         </div>
                     </div>
@@ -32,14 +32,14 @@
                 <div class="row">
                     <div class="col-md-1"></div>
                     <div class="col-md-5">
-                        <a class='btn btn-success two-options' id='signin'>Sign In</a>
+                        <a class='btn btn-success two-options' id='signin' data-toggle="collapse" data-target="#signinForm">Sign In</a>
                     </div>
                     <div class="col-md-5">
                         <a class='btn btn-primary two-options' id='register'>Register Account</a>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-5 offset-md-3">
+                    <div class="col-md-5 offset-md-3 collapse" id="signinForm">
                         <div class="row">
                             <h3>Sign In</h3>
                         </div>
@@ -64,11 +64,24 @@
                                 <a type="button" class="btn btn-success" id="signin">Sign in</a>
                             </div>
                         </div>
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog"aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Incorrect Username or Password :(</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                             </button>
+                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+</div>
+</div>
+</div>
 </body>
 <script type="text/javascript">
 
@@ -87,7 +100,9 @@
             console.log("STATUS:dd " + status);
             console.log(data.length);
             if(data.length == 0){
-                console.log("Incorrect")
+                console.log("Incorrect");
+                signinForm.className += " incorrect";
+                $("#myModal").modal("toggle");
             } else {
                 window.location.href = "journal.php";
             }
@@ -95,11 +110,11 @@
     });
 
 
-        $(document).ready(function(){
-            console.log("test2");
-            $("#signin").click(function(event) {
-                console.log("test1");
-            });
+    $(document).ready(function(){
+        console.log("test2");
+        $("#signin").click(function(event) {
+            console.log("test1");
         });
-    </script>
-    </html>
+    });
+</script>
+</html>

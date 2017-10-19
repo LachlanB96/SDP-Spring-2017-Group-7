@@ -9,6 +9,9 @@
 		<script type="text/javascript">
 			var currentEntry = "<?=$_POST['currentEntry']?>";
 		</script>
+
+
+
 	<?php } ?>
 </head>
 <body>
@@ -40,12 +43,12 @@
 				</div>
 				<div class="row">
 					<div class="col-md-2">
-						<a type="button" class="btn btn-default" href="createJournal.php">
+						<a type="button" class="btn btn-default" id="editEntry">
 							Edit Entry
 						</a>
 					</div>
 					<div class="col-md-2">
-						<a type="button" class="btn btn-default" href="createJournal.php">
+						<a type="button" class="btn btn-default btn-disabled">
 							View History
 						</a>
 					</div>
@@ -66,6 +69,11 @@
 	</div>
 </body>
 <script type="text/javascript">
+
+	var entryArray; 
+
+
+	
 
 	function createTable(data){
 		entry = data.split("|| ||").filter(Boolean);
@@ -90,5 +98,18 @@
     		//createTable(data);
     	});
 	});
+
+	$("#editEntry").click(function(){
+		var url = 'editEntry.php';
+		var form = $('<form action="' + url + '" method="post">' +
+			'<input type="text" name="currentEntry" value="' + entryArray + '" />' +
+			'</form>');
+		$('body').append(form);
+		form.submit();
+		console.log(entryArray);
+	})
 </script>
+<?php
+var_dump($_SESSION);
+?>
 </html>

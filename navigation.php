@@ -2,10 +2,10 @@
 		<div class="row">
 			<div class="col-md-12 nav-padding">
 				<ul class="nav nav-pills">
-					<li class="active">
+					<li>
 						<a href="#">Home</a>
 					</li>
-					<li class="disabled">
+					<li>
 						<a href="#">Profile</a>
 					</li>
 					<li>
