@@ -122,7 +122,7 @@ $("#input_delete").click(function(){
 		$.post("databaseHandler.php", objectData, function(data, status){
 			console.log("DATA: " + data);
 			console.log("STATUS:dd " + status);
-			window.location.href = "journal.php";
+			//window.location.href = "journal.php";
 	});
 });
 

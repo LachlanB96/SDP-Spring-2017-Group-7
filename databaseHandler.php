@@ -152,7 +152,7 @@ else if($_POST['action'] == "search"){
 			if($_SESSION['currentUser'] == "admin"){
 				$sql="SELECT * FROM journalEntries";
 			} else {
-				$sql="SELECT * FROM journalEntries WHERE title LIKE '" . $_POST['search'] . "%' AND creator LIKE '" . $_SESSION['currentUser'] . "'";
+				$sql="SELECT * FROM journalEntries WHERE title LIKE '%" . $_POST['search'] . "%' AND creator LIKE '" . $_SESSION['currentUser'] . "'";
 			}
 			if ($entries=$conn->query($sql)){
 				while ($entry=mysqli_fetch_row($entries)){
@@ -174,9 +174,9 @@ else if($_POST['action'] == "search"){
 }
 else if($_POST['action'] == "delete"){
 	if($_POST['type'] == "entry"){
-		$sql="DELETE FROM journalEntries WHERE title = '" . $_POST['entryName'] . "' AND creator = '" . $_SESSION['currentUser'] . "'";
+		$sql="DELETE FROM journalEntries WHERE title LIKE '" . $_POST['entryName'] . "' AND creator LIKE '" . $_SESSION['currentUser'] . "'";
 		if ($conn->query($sql) === TRUE) {
-			echo "New record created successfully";
+			echo "record deleted successfully";
 		} else {
 			echo "Error: " . $sql . "<br>" . $conn->error;
 		}

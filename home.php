@@ -56,7 +56,7 @@
                                 <p>Password:</p>
                             </div>
                             <div class="col-md-10">
-                                <input type="text" id="input_password" placeholder="Password">
+                                <input type="password" id="input_password" placeholder="Password">
                             </div>
                         </div>
                         <div class="row">
@@ -84,7 +84,7 @@
                                 <p>Password:</p>
                             </div>
                             <div class="col-md-10">
-                                <input type="text" id="input_regPassword" placeholder="Password">
+                                <input type="password" id="input_regPassword" placeholder="Password">
                             </div>
                         </div>
                         <div class="row">
