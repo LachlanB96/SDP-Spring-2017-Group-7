@@ -1,16 +1,20 @@
+body{
+    background-color: #545551;
+    margin: 0;
+    padding: 0;
+}
+
+div {
+    color: #FFF;
+}
 
 .nav{
     border-left: 100px;
-    background-color: #023E8E;
+    background-color: #272822;
     margin-bottom: 30px;
     width: 100%;
 }
 
-body{
-    background-color: #C4C4C4;
-    margin: 0;
-    padding: 0;
-}
 .nav li a{
     color: #FFF;
 
@@ -23,12 +27,12 @@ body{
 
 .nav li a:focus{
     color: #FFF;
-    background-color: #023E8E;
+    background-color: #272822;
 }
 
 .nav .open>a, .nav .open>a:focus, .nav .open>a:hover {
     color: #FFF;
-    background-color: #023E8E;
+    background-color: #272822;
 }
 
 
@@ -40,16 +44,21 @@ body{
 }
 
 .dropdown-menu {
-    background-color: #023E8E;
+    color: #FFF;
+    background-color: #272822;
 }
 
 #entryDescription{
-    background-color: #FFF;
+    background-color: #222;
 }
 
+.dropdown-menu li a{
+    color: #FFF;
+}
 
 tr{
-    background-color: #FFF;
+    color: #FFF;
+    background-color: #222;
 }
 
 .two-options{
@@ -61,4 +70,12 @@ tr{
 
 .incorrect{
     box-shadow:0 0 20px red;
+}
+
+.dropdown-menu {
+    color: #FFF;
+}
+
+input{
+    color: #000;
 }

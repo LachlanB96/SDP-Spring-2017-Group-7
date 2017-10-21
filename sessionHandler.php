@@ -11,5 +11,16 @@ if($_POST['action'] == "set"){
 	if(isset($_SESSION['currentUser'])){
 		unset($_SESSION['currentUser']);
 	}
+}else if($_POST['action'] == "toggleTheme"){
+	echo "yy";
+	if(!isset($_SESSION['theme'])){
+		$_SESSION['theme'] = 'dark';
+	}
+	else if($_SESSION['theme'] == 'dark'){
+		$_SESSION['theme'] = 'default';
+	}
+	else if($_SESSION['theme'] == 'default'){
+		$_SESSION['theme'] = 'dark';
+	}
 }
 ?>

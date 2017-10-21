@@ -5,20 +5,24 @@
 	session_start();
 	if(isset($_POST['currentEntry'])){
 		$_SESSION['currentEntry'] = $_POST['currentEntry'];
-		?>
-		<script type="text/javascript">
-			var currentEntry = "<?=$_POST['currentEntry']?>";
-		</script>
+	} else {
+		$_POST['currentEntry'] = $_SESSION['currentEntry'];
+	} ?>
+	<script type="text/javascript">
+		var currentEntry = "<?=$_POST['currentEntry']?>";
+	</script>
 
-
-
-	<?php } ?>
 </head>
 <body>
 	<?php include("navigation.php"); ?>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-2">
+						<a type="button" class="btn btn-default" href="journalEntries.php">Back</a>
+					</div>
+				</div>
 				<div class="row">
 					<div class="col-md-12">
 						<div class="page-header">
@@ -48,9 +52,15 @@
 						</a>
 					</div>
 					<div class="col-md-2">
-						<a type="button" class="btn btn-default btn-disabled">
-							View History
-						</a>
+						<a href="#" data-toggle="dropdown" class="btn btn-default dropdown-toggle">View History<strong class="caret"></strong></a>
+						<ul class="dropdown-menu">
+							<li>
+								<a id="#">Version 2</a>
+							</li>
+							<li>
+								<a href="#">Version 3</a>
+							</li>
+						</ul>
 					</div>
 					<div class="col-md-2">
 						<a type="button" class="btn btn-default" id="input_delete">
@@ -60,11 +70,6 @@
 					<div class="col-md-2">
 					</div>
 					<div class="col-md-2">
-					</div>
-					<div class="col-md-2">
-						<label class="form-check-label">
-							<input class="form-check-input" type="checkbox"> Only show active entries
-						</label>
 					</div>
 				</div>
 			</div>
@@ -76,7 +81,7 @@
 	var entryArray; 
 
 
-	
+
 
 	function createTable(data){
 		entry = data.split("|| ||").filter(Boolean);
@@ -100,6 +105,7 @@
 			$("#entryDescription").html(entryArray[3]);
     		//createTable(data);
     	});
+
 	});
 
 	$("#editEntry").click(function(){
@@ -113,21 +119,23 @@
 	});
 
 
-$("#input_delete").click(function(){
+	$("#input_delete").click(function(){
 		objectData = {
-			action: "read",
-			type: "entries",
+			action: "delete",
+			type: "entry",
 			entryName: currentEntry
 		};
 		$.post("databaseHandler.php", objectData, function(data, status){
 			console.log("DATA: " + data);
 			console.log("STATUS:dd " + status);
-			//window.location.href = "journal.php";
+			window.location.href = "journalEntries.php";
+		});
 	});
-});
 
 </script>
 <?php
 var_dump($_SESSION);
+echo "<br />";
+var_dump($_POST);
 ?>
 </html>

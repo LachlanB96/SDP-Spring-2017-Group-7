@@ -15,9 +15,9 @@
 					<div class="col-md-6">
 						<div class="row">
 							<div class="col-md-2">
-								<h3>
+								<p>
 									Tag Search
-								</h3>
+								</p>
 							</div>
 							<div class="col-md-10">
 								<button type="button" class="btn">
@@ -38,9 +38,9 @@
 					<div class="col-md-6">
 						<div class="row">
 							<div class="col-md-2">
-								<h3>
+								<p>
 									Word Search
-								</h3>
+								</p>
 							</div>
 							<div class="col-md-6">
 								<input type="text" id="input_wordSearch">
@@ -78,11 +78,6 @@
 					</div>
 					<div class="col-md-2">
 					</div>
-					<div class="col-md-2">
-						<label class="form-check-label">
-							<input class="form-check-input" type="checkbox"> Only show active entries
-						</label>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -109,7 +104,7 @@
 		console.log($(this)["0"].id);
 		var url = 'journalEntries.php';
 		var form = $('<form action="' + url + '" method="post">' +
-			'<input type="text" name="entryName" value="' + $(this)["0"].id + '" />' +
+			'<input type="text" name="currentJournal" value="' + $(this)["0"].id + '" />' +
 			'</form>');
 		$('body').append(form);
 		form.submit();

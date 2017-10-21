@@ -5,6 +5,12 @@
 	session_start();
 	$entryValues = explode(",", $_POST['currentEntry']);
 	?>
+	<script type="text/javascript">
+		var currentEntry = "<?=$_POST['currentEntry']?>";
+		var entryArray = currentEntry.split(",");
+		console.log(currentEntry);
+		console.log(entryArray);
+	</script>
 </head>
 <body>
 	<?php include("navigation.php"); ?>
@@ -43,6 +49,7 @@
 						Description:
 					</div>
 					<div class="col-md-8">
+						<br />
 						<textarea class="form-control" rows="5" id="input_description"><?=$entryValues[3]?></textarea>
 					</div>
 				</div>
@@ -81,8 +88,8 @@
 						</a>
 					</div>
 					<div class="col-md-2">
-						<a type="button" class="btn btn-default" id="createJournal">
-							Create
+						<a type="button" class="btn btn-default" id="finishEditting">
+							Confirm Edit
 						</a>
 					</div>
 				</div>
@@ -93,39 +100,36 @@
 <script type="text/javascript">
 
 
-
-
-
-
 	$(document).ready(function(){
-		$("#createJournal").click(function(event) {
+		$("#finishEditting").click(function(event) {
 			date = new Date();
 			objectData = {
 				action: "create",
-				type: "entry",
-				title: $("#input_entryTitle").val(),
-				//collaborators: $("#input_collaborators").val(),
-				description: $("#input_description").val(),
-				//input_tags: $("#input_tags").val(),
-				creationDate: (date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear())
+				type: "entryEdit",
+				oldTitle: entryArray[0],
+				journal: entryArray[1],
+				oldContents: entryArray[3],
+				oldDateCreated: entryArray[4],
+				newTitle: $("#input_entryTitle").val(),
+				newDescription: $("#input_description").val(),
+				newDateCreated: (date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear()),
+				newRevisionNumber: "1"
 			};
+			console.log(objectData);
 			$.post("databaseHandler.php", objectData, function(data, status){
 				console.log("DATA: " + data);
-    			console.log("STATUS:dd " + status);
-				window.location.href = "createEntry.php";
+				console.log("STATUS: " + status);
+				//window.location.href = "entry.php";
 			});
 
 		});
 	});
 
 
-
-
-
-
-
-
-
 </script>
-
+<?php
+var_dump($_SESSION);
+echo "<br />";
+var_dump($_POST);
+?>
 </html>

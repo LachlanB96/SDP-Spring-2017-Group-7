@@ -111,7 +111,7 @@
 			$.post("databaseHandler.php", objectData, function(data, status){
 				console.log("DATA: " + data);
     			console.log("STATUS:dd " + status);
-				window.location.href = "createEntry.php";
+				window.location.href = "journalEntries.php";
 			});
 
 		});

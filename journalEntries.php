@@ -3,13 +3,19 @@
 	<?php
 	include("headers.php");
 	session_start();
-	if(isset($_POST['entryName'])){
-		$_SESSION['entryName'] = $_POST['entryName'];
+	if(isset($_POST['currentJournal'])){
+		$_SESSION['currentJournal'] = $_POST['currentJournal'];
 		?>
 		<script type="text/javascript">
-			var entryName = "<?=$_POST['entryName']?>";
+			var currentJournal = "<?=$_POST['currentJournal']?>";
 		</script>
-	<?php } ?>
+	<?php 
+	} else if(isset($_SESSION['currentJournal'])){
+		?>
+		<script type="text/javascript">
+			var currentJournal = "<?=$_POST['currentJournal']?>";
+		</script>
+		<?php } ?>
 </head>
 <body>
 	<?php include("navigation.php"); ?>
@@ -42,7 +48,7 @@
 					<div class="col-md-12">
 						<div class="page-header">
 							<h1 class="text-center">
-								Journal: <?=$_SESSION['entryName']?>
+								Journal: <?=$_SESSION['currentJournal']?>
 							</h1>
 						</div>
 						<div id="journalEntriesTable"></div>
@@ -108,7 +114,7 @@
         //console.log(data.data);
         rows = data.split("|| ||").filter(Boolean);
         if (rows < 1){
-        	html = "<div class='alert alert-danger'>"
+        	html = "<div class='alert alert-danger'>";
         	html += "<strong>Error!</strong> No entries are in this journal.";
         	html += "</div>";
         }
@@ -136,15 +142,14 @@
 
 
     $(document).ready(function(){
-    	input_title = {additionType: "textOutput", id: "information", text: "Here are your journals: "};
     	objectData = {
     		action: "read",
     		type: "journalEntries",
-    		journalName: entryName
+    		journalName: currentJournal
     	};
     	$.post("databaseHandler.php", objectData, function(data, status){
     		console.log("DATA: " + data);
-    		console.log("STATUS:dd " + status);
+    		console.log("STATUS: " + status);
     		createTable(data);
         });
     });

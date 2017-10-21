@@ -24,7 +24,7 @@
 						<a href="#" data-toggle="dropdown" class="btn dropdown-toggle btn-secondary">Logged in: <?=$_SESSION['currentUser']?><strong class="caret"></strong></a>
 						<ul class="dropdown-menu">
 							<li>
-								<a href="#">Toggle Theme</a>
+								<a id="themeToggle">Toggle Theme</a>
 							</li>
 							<li>
 								<a href="#">View All Journals</a>
@@ -53,6 +53,15 @@
 				console.log("DATA: " + data);
 				console.log("STATUS: " + status);
 				window.location.href = "home.php";
+			});
+		});
+
+		$("#themeToggle").click(function(){
+			console.log("cya");
+			$.post("sessionHandler.php", {action: "toggleTheme"}, function(data, status){
+				console.log("DATA: " + data);
+				console.log("STATUS: " + status);
+				location.reload();
 			});
 		});
 	</script>

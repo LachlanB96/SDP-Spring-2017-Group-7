@@ -29,6 +29,13 @@ if($_POST['action'] == "create"){
 		$sql = "INSERT INTO journalEntries (title, journal, creator, contents, dateCreated)
 		VALUES ('".$_POST['title']."','".$_SESSION['entryName']."','".$_SESSION['currentUser']."','".$_POST['description']."','".$_POST['creationDate']."')";
 		echo $sql;
+	} else if($_POST['type'] == "entryEdit"){
+		$sql2 = "INSERT INTO entryEdits (title, journal, contents, dateCreated, version)
+		VALUES ('".$_POST['oldTitle']."','".$_SESSION['entryName']."','".$_POST['oldContents']."','".$_POST['oldDateCreated']."','".$_POST['newRevisionNumber']."')";
+
+		$sql = "UPDATE journalEntries  SET title='".$_POST['newTitle']."' AND contents='".$_POST['newDescription']."'
+		WHERE title LIKE '".$_POST['oldTitle']."' AND journal LIKE '".$_POST['journal']."'";
+		echo $sql;
 	}
 	if ($conn->query($sql) === TRUE) {
 
@@ -68,7 +75,7 @@ else if($_POST['action'] == "read"){
 			}
 		} 
 	} else if($_POST['type'] == "journalEntries"){
-		$sql="SELECT * FROM journalEntries WHERE journal LIKE '" . $_POST['journalName'] . "'";
+		$sql="SELECT * FROM journalEntries WHERE journal LIKE '" . $_SESSION['currentJournal'] . "'";
 		if ($journals=$conn->query($sql)){
 			while ($journal=mysqli_fetch_row($journals)){
 				echo $journal[0];
